@@ -77,7 +77,7 @@ const updateUsuario = async (req, res = response) => {
     }
 
     //actualizaciones
-    const { password, google, email, ...campos } = req.body;
+    const { password, email, ...campos } = req.body;
 
     if (usuarioDB.email !== email) {
       const existeEmail = await Usuario.findOne({ email: email });

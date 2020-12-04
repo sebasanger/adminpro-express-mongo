@@ -54,7 +54,7 @@ const updateHospital = async (req, res = response) => {
     //actualizaciones
     const { usuario, nombre } = req.body;
 
-    //verificar si existe un hospital con ese nombre
+    //verificar si existe un hospital con ese nombre minetras no sea el mismo que ya esta
     if (hospitalDB.nombre !== nombre) {
       const existeHospital = await Hospital.findOne({ nombre });
       if (existeHospital) {
@@ -72,8 +72,6 @@ const updateHospital = async (req, res = response) => {
       hospitalActualizado,
     });
   } catch (error) {
-    console.log(id);
-    console.error("error al actualizar el hospital");
     res.status(500).json({
       ok: false,
       mensaje: "Error inesperado",

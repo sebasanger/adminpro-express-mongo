@@ -13,6 +13,9 @@ app.use(cors());
 //lectura del body
 app.use(express.json());
 
+//directorio publico
+app.use(express.static("public"));
+
 mongoose.set("useFindAndModify", false);
 
 //rutas

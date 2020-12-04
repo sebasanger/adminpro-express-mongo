@@ -22,10 +22,6 @@ const UsuarioSchema = Schema({
     required: true,
     default: "USER_ROLE",
   },
-  google: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 UsuarioSchema.method("toJSON", function () {

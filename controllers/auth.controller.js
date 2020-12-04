@@ -1,5 +1,5 @@
 const Usuario = require("../models/usuario.model");
-const { response } = require("express");
+const { response, request } = require("express");
 const bcryptjs = require("bcryptjs");
 const { generarJWT } = require("../helpers/jwt");
 
@@ -42,6 +42,19 @@ const login = async (req, res = response) => {
   }
 };
 
+const renewToken = async (req = request, res = response) => {
+  const uid = req.uid;
+  const token = await generarJWT(uid);
+
+  return res.status(200).json({
+    ok: true,
+    mensaje: "Renovando token",
+    uid,
+    token,
+  });
+};
+
 module.exports = {
   login,
+  renewToken,
 };
