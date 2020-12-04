@@ -4,11 +4,28 @@ const bcryptjs = require("bcryptjs");
 const { generarJWT } = require("../helpers/jwt");
 
 const getUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find();
+  const desde = Number(req.query.desde) || 0;
+  const hasta = Number(req.query.hasta) || desde + 5;
+
+  /*
+  const usuarios = await Usuario.find().skip(desde).limit(hasta);
+  const total = await Usuario.count();
+  */
+
+  //igual que arriba pero se realizan en simultaneo, con desestructuracion se obtienen
+  // los resultados de ambas promesas dentro del promise all
+  const [usuarios, total] = await Promise.all([
+    Usuario.find().skip(desde).limit(hasta),
+
+    Usuario.count(),
+  ]);
+
   res.json({
     ok: true,
     usuarios: usuarios,
+    viendo: usuarios.length,
     jwt_uid: req.uid,
+    total,
   });
 };
 
@@ -47,7 +64,6 @@ const saveUsuario = async (req, res = response) => {
 };
 
 const updateUsuario = async (req, res = response) => {
-  //TODO: validar usuarios pro email
   const uid = req.params.id;
 
   try {
@@ -88,7 +104,7 @@ const updateUsuario = async (req, res = response) => {
       usuarioAnterior: usuarioActualizado,
     });
   } catch (error) {
-    console.error("error al crear usuario");
+    console.error("error al actualizar usuario");
     res.status(500).json({
       ok: false,
       mensaje: "Error inesperado",
@@ -116,7 +132,6 @@ const deleteUsuario = async (req, res) => {
       usuario,
     });
   } catch (error) {
-    console.error("error al crear usuario");
     res.status(500).json({
       ok: false,
       mensaje: "Error inesperado",
