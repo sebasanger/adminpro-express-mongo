@@ -67,7 +67,9 @@ const updateMedico = async (req, res = response) => {
       }
     }
 
-    const medicoActualizado = await Medico.findByIdAndUpdate(id, req.body);
+    const medicoActualizado = await Medico.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     res.json({
       ok: true,
       id,

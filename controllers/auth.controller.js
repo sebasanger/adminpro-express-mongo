@@ -33,6 +33,7 @@ const login = async (req, res = response) => {
       ok: true,
       mensaje: "session iniciada",
       token,
+      usuario: usuarioDB,
     });
   } catch (error) {
     return res.status(500).json({
@@ -45,12 +46,14 @@ const login = async (req, res = response) => {
 const renewToken = async (req = request, res = response) => {
   const uid = req.uid;
   const token = await generarJWT(uid);
+  const usuario = await Usuario.findById(uid);
 
   return res.status(200).json({
     ok: true,
     mensaje: "Renovando token",
     uid,
     token,
+    usuario,
   });
 };
 

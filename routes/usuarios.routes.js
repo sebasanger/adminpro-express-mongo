@@ -26,7 +26,6 @@ router.post(
     check("password", "El password es obligatorio").notEmpty(),
     check("email", "El email es obligatorio").notEmpty(),
     validarCampos,
-    validarJWT,
   ],
   saveUsuario
 );

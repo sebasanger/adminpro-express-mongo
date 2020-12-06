@@ -98,10 +98,12 @@ const updateUsuario = async (req, res = response) => {
 
     campos.email = email;
 
-    const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos);
+    const usuario = await Usuario.findByIdAndUpdate(uid, campos, {
+      new: true,
+    });
     res.json({
       ok: true,
-      usuarioAnterior: usuarioActualizado,
+      usuario,
     });
   } catch (error) {
     console.error("error al actualizar usuario");
