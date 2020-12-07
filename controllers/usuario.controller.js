@@ -5,7 +5,7 @@ const { generarJWT } = require("../helpers/jwt");
 
 const getUsuarios = async (req, res) => {
   const desde = Number(req.query.desde) || 0;
-  const hasta = Number(req.query.hasta) || desde + 5;
+  const totalPorPagina = Number(req.query.total) || 5;
 
   /*
   const usuarios = await Usuario.find().skip(desde).limit(hasta);
@@ -15,7 +15,7 @@ const getUsuarios = async (req, res) => {
   //igual que arriba pero se realizan en simultaneo, con desestructuracion se obtienen
   // los resultados de ambas promesas dentro del promise all
   const [usuarios, total] = await Promise.all([
-    Usuario.find().skip(desde).limit(hasta),
+    Usuario.find().skip(desde).limit(totalPorPagina),
 
     Usuario.count(),
   ]);
@@ -87,13 +87,6 @@ const updateUsuario = async (req, res = response) => {
           mensaje: "Ese correo ya esta en uso",
         });
       }
-    }
-
-    if (usuarioDB.id !== req.uid) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: "No es el usuario dueño de esta cuenta",
-      });
     }
 
     campos.email = email;
