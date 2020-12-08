@@ -1,6 +1,6 @@
 const Medico = require("../models/medico.model");
 const Hospital = require("../models/hospital.model");
-const { response } = require("express");
+const { response, request } = require("express");
 
 const getMedicos = async (req, res) => {
   const medicos = await Medico.find()
@@ -111,9 +111,38 @@ const deleteMedico = async (req, res) => {
   }
 };
 
+const getMedicoById = async (req = request, res = response) => {
+  const id = req.params.id;
+
+  try {
+    const medicoDB = await Medico.findById(id);
+
+    if (!medicoDB) {
+      return res.json({
+        ok: false,
+        error: "No existe medico con ese id",
+      });
+    }
+    const medico = await Medico.findById(id)
+      .populate("usuario", "nombre img")
+      .populate("hospital", "nombre img");
+    res.json({
+      ok: true,
+      medico,
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error inesperado",
+      error,
+    });
+  }
+};
+
 module.exports = {
   getMedicos,
   saveMedico,
   updateMedico,
   deleteMedico,
+  getMedicoById,
 };
