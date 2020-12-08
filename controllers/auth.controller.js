@@ -2,7 +2,7 @@ const Usuario = require("../models/usuario.model");
 const { response, request } = require("express");
 const bcryptjs = require("bcryptjs");
 const { generarJWT } = require("../helpers/jwt");
-
+const { getMenu } = require("../helpers/menu-front");
 const login = async (req, res = response) => {
   const { email, password } = req.body;
 
@@ -34,6 +34,7 @@ const login = async (req, res = response) => {
       mensaje: "session iniciada",
       token,
       usuario: usuarioDB,
+      menu: getMenu(usuarioDB.role),
     });
   } catch (error) {
     return res.status(500).json({
@@ -54,6 +55,7 @@ const renewToken = async (req = request, res = response) => {
     uid,
     token,
     usuario,
+    menu: getMenu(usuario.role),
   });
 };
 

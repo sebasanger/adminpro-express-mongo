@@ -12,11 +12,11 @@ const {
 } = require("../controllers/usuario.controller");
 
 const { check } = require("express-validator");
-const { validarJWT } = require("../middleware/validar-jwt");
+const { validarJWT, validarAdminRole } = require("../middleware/validar-jwt");
 
 const router = Router();
 
-router.get("/", validarJWT, getUsuarios);
+router.get("/", validarJWT, validarAdminRole, getUsuarios);
 
 router.post(
   "/",
@@ -26,6 +26,7 @@ router.post(
     check("password", "El password es obligatorio").notEmpty(),
     check("email", "El email es obligatorio").notEmpty(),
     validarCampos,
+    validarAdminRole,
   ],
   saveUsuario
 );
