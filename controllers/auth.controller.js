@@ -40,6 +40,7 @@ const login = async (req, res = response) => {
     return res.status(500).json({
       ok: false,
       mensaje: "Error al iniciar session",
+      error,
     });
   }
 };

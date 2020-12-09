@@ -59,6 +59,7 @@ const saveUsuario = async (req, res = response) => {
     res.status(500).json({
       ok: false,
       mensaje: "Error inesperado",
+      error,
     });
   }
 };

@@ -3,6 +3,7 @@ const { dbconecection } = require("./database/config");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
+const path = require("path");
 
 //conexion de db
 dbconecection();
@@ -25,6 +26,11 @@ app.use("/api/hospitales", require("./routes/hospitales.routes"));
 app.use("/api/medicos", require("./routes/medicos.routes"));
 app.use("/api/todo", require("./routes/busquedas.routes"));
 app.use("/api/upload", require("./routes/uploads.routes"));
+
+//para servir la SPA
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "public/index.html"));
+});
 
 const port = process.env.PORT || 4000;
 const www = process.env.WWW || "./";
